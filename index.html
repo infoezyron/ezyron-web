@@ -114,8 +114,9 @@ canvas.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* SISTEMA */
 #sistema{height:680vh}
 #sistema .pin{background:var(--ink)}
-#sistema .pin::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(11,11,13,.92) 0%,rgba(11,11,13,.7) 30%,rgba(11,11,13,0) 48%)}
+#sistema .pin::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:var(--veil,1);background:linear-gradient(90deg,rgba(11,11,13,.92) 0%,rgba(11,11,13,.7) 30%,rgba(11,11,13,0) 48%)}
 .s-card,.s-index,.s-counter{z-index:2}
+.s-index,.s-counter{opacity:var(--hud,1)}
 @media (max-width:900px){#sistema .pin::after{background:linear-gradient(0deg,rgba(11,11,13,.95) 0%,rgba(11,11,13,.8) 34%,rgba(11,11,13,0) 52%)}}
 .s-card{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);width:min(440px,38vw);pointer-events:none}
 .s-chapter{position:absolute;left:0;top:50%;width:100%;transform:translateY(-50%)}
@@ -212,7 +213,8 @@ canvas.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* CIERRE */
 #cierre{height:340vh}
 #cierre .pin{background:var(--ink);color:var(--ink)}
-.c-dot{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:var(--red);will-change:transform}
+/* el punto se recorta con clip-path (vectorial): sigue nítido al crecer a pantalla completa, sin bordes pixelados */
+.c-dot{position:absolute;inset:0;background:var(--red);clip-path:circle(20px at 50% 50%)}
 .c-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 var(--pad);gap:34px}
 .c-copy h2{font:800 clamp(56px,11vw,190px)/.84 var(--sans);letter-spacing:-.065em}
 .c-copy h2 .serif{font-weight:400}
@@ -711,7 +713,8 @@ const DX=980.5, DY=533;
 /* ---------- canvas helpers ---------- */
 function setup(cv){
   const o={cv,ctx:cv.getContext('2d'),W:0,H:0,dpr:1};
-  o.fit=()=>{const r=cv.getBoundingClientRect();o.dpr=Math.min(devicePixelRatio||1,2);o.W=r.width;o.H=r.height;cv.width=Math.round(r.width*o.dpr);cv.height=Math.round(r.height*o.dpr);};
+  o.fit=()=>{const r=cv.getBoundingClientRect();// supermuestreo: en pantallas 1x se dibuja al doble (1,5x en monitores grandes) para bordes suaves, sin dientes de sierra
+    o.dpr=Math.min(2,Math.max(devicePixelRatio||1,r.width*r.height>2.4e6?1.5:2));o.W=r.width;o.H=r.height;cv.width=Math.round(r.width*o.dpr);cv.height=Math.round(r.height*o.dpr);};
   o.fit();return o;
 }
 function glow(ctx,x,y,r,a){
@@ -867,8 +870,11 @@ function drawS2(p,t){
   ctx.textAlign='left';ctx.lineWidth=1;
 
   // hub
-  const big=ease(seg(p,.9,1));
-  const hr=lerp(R0*(1+.05*Math.sin(t*2.1)),Math.hypot(W,H)*.6,big);
+  const big=ease(seg(p,.88,.97));
+  const hr=lerp(R0*(1+.05*Math.sin(t*2.1)),Math.hypot(W,H)*.75,big);
+  // velo lateral y HUD se funden con el rojo: el relevo a Servicios queda en rojo limpio, sin cortes
+  const pin=S2.cv.parentElement;pin.style.setProperty('--veil',(1-ease(seg(p,.86,.95))).toFixed(3));
+  pin.style.setProperty('--hud',(1-ease(seg(p,.93,.99))).toFixed(3));
   pulses(ctx,hx,hy,R0,t,(1-morph)*fade*.8);
   ctx.save();ctx.shadowColor='rgba(227,35,45,.7)';ctx.shadowBlur=30*(1-big);dot(ctx,hx,hy,hr);ctx.restore();
 }
@@ -962,7 +968,7 @@ function drawClose(p){
   const W=innerWidth,H=innerHeight,diag=Math.hypot(W,H);
   const g=ease(seg(p,.12,.55));
   const sc=lerp(1,diag/40*1.05,g)*(1+.05*Math.sin(perf()*2.1)*(1-g));
-  cDot.style.transform=`scale(${sc.toFixed(3)})`;
+  cDot.style.clipPath=`circle(${(20*sc).toFixed(2)}px at 50% 50%)`;
 }
 const perf=()=>performance.now()/1000;
 
@@ -1006,7 +1012,7 @@ addEventListener('resize',()=>{S1.fit();S2.fit();});
 function frame(){
   const t=perf();
   readProgress();
-  secs.forEach(s=>{s.sp+= (s.p-s.sp)*(SNAP?1:.12); if(Math.abs(s.p-s.sp)<1e-4)s.sp=s.p;});
+  secs.forEach(s=>{s.sp+= (s.p-s.sp)*(SNAP?1:.12); s.sp=clamp(s.sp,s.p-.035,s.p+.035); if(Math.abs(s.p-s.sp)<1e-4)s.sp=s.p;});
   const o=byId.origen,s2=byId.sistema,sv=byId.servicios,me=byId.metodo,cl=byId.cierre;
   if(o.vis){drawS1(o.sp,t);applyFades(o);}
   if(s2.vis){drawS2(s2.sp,t);applyFades(s2);

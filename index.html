@@ -506,6 +506,10 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 .form-row{display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:6px}
 .form-row .note{margin:0}
 .form-msg{font:500 13px var(--mono);letter-spacing:.06em;min-height:1em}
+.form-msg.ok{color:var(--cream)}
+.form-msg a{text-decoration:underline}
+.lead-form .hp{position:absolute;left:-9999px;width:1px;height:1px;opacity:0}
+.lead-form button[disabled]{opacity:.6;cursor:wait}
 
 /* ---------- v3 · PREGUNTAS (SEO: texto rastreable, sin romper la contención) ---------- */
 .faq{background:var(--ink);padding:clamp(90px,11vw,160px) var(--pad);display:grid;grid-template-columns:1fr 1.35fr;gap:clamp(40px,7vw,120px);border-top:1px solid var(--line)}
@@ -999,12 +1003,13 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     <p>Con una frase nos basta. Te respondemos con un primer mapa: qué conectar, qué automatizar y por dónde empezar.</p>
   </div>
   <form class="lead-form" id="lead-form" novalidate>
+    <input type="checkbox" name="botcheck" class="hp" tabindex="-1" autocomplete="off" aria-hidden="true">
     <label class="lf"><span>Tu nombre</span><input name="nombre" required placeholder="Ana García" autocomplete="name"></label>
     <label class="lf"><span>Email</span><input name="email" type="email" required placeholder="ana@empresa.com" autocomplete="email"></label>
     <label class="lf"><span>¿Qué tarea se repite cada semana?</span><textarea name="tarea" rows="3" required placeholder="Cada lunes pasamos los pedidos del correo al ERP a mano…"></textarea></label>
     <div class="form-row">
       <button class="btn dark" type="submit" data-cursor="Enviar"><i></i>Pedir diagnóstico</button>
-      <span class="note">Abre tu correo con el mensaje listo</span>
+      <span class="note">Llega directo a nuestro correo</span>
     </div>
     <p class="form-msg" id="form-msg" aria-live="polite"></p>
   </form>

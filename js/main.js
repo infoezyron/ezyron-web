@@ -449,15 +449,40 @@ function roll(){
 targetWeek=shownWeek=calc();paint(shownWeek);
 ranges.forEach(r=>r.addEventListener('input',()=>{targetWeek=calc();if(!rolling){rolling=true;requestAnimationFrame(roll);}}));
 
-/* ---------- v2 · formulario: sin backend, abre el correo con el mensaje listo ---------- */
-$('lead-form').addEventListener('submit',e=>{
+/* ---------- v3 · formulario: se envía directo a info.ezyron@gmail.com (Web3Forms), sin abrir el correo del visitante ---------- */
+// Clave pública de Web3Forms (no es secreta: solo permite enviar a info.ezyron@gmail.com). Se obtiene gratis en https://web3forms.com
+const W3F_KEY='PEGAR_AQUI_LA_CLAVE_DE_WEB3FORMS';
+const MAIL_TO='info.ezyron@gmail.com';
+const leadForm=$('lead-form'),leadBtn=leadForm.querySelector('button[type=submit]'),leadLbl=leadBtn.lastChild;
+leadForm.addEventListener('submit',async e=>{
   e.preventDefault();const f=e.target,msg=$('form-msg');
-  if(!f.checkValidity()){const bad=[...f.elements].find(x=>x.willValidate&&!x.checkValidity());bad&&bad.focus();msg.textContent='Falta '+(bad?bad.closest('.lf').querySelector('span').textContent.toLowerCase():'un campo')+'.';return;}
+  msg.classList.remove('ok','err');
+  // todos los campos rellenos (sin contar espacios) y email válido
+  [...f.elements].forEach(x=>{if(x.required){x.setCustomValidity(x.value.trim()?'':'vacío');}});
+  if(!f.checkValidity()){const bad=[...f.elements].find(x=>x.willValidate&&!x.checkValidity());bad&&bad.focus();
+    const name=bad&&bad.closest('.lf')?bad.closest('.lf').querySelector('span').textContent.toLowerCase():'un campo';
+    msg.textContent=(bad&&bad.type==='email'&&bad.value.trim()?'Revisa el email.':'Falta '+name+'.');msg.classList.add('err');return;}
+  if(f.botcheck&&f.botcheck.checked)return; // trampa anti-spam
   const d=Object.fromEntries(new FormData(f));
   const body=`Hola Ezyron,\n\nSoy ${d.nombre} (${d.email}).\n\nLo que se repite cada semana:\n${d.tarea}\n`;
-  location.href='mailto:info.ezyron@gmail.com?subject='+encodeURIComponent('Diagnóstico · '+d.nombre)+'&body='+encodeURIComponent(body);
-  msg.textContent='Listo: revisa tu programa de correo.';
+  const fallback=()=>{location.href='mailto:'+MAIL_TO+'?subject='+encodeURIComponent('Diagnóstico · '+d.nombre)+'&body='+encodeURIComponent(body);};
+  if(!/^[0-9a-f-]{36}$/i.test(W3F_KEY)){fallback();msg.textContent='Listo: revisa tu programa de correo.';return;}
+  leadBtn.disabled=true;leadBtn.setAttribute('aria-busy','true');const lbl=leadLbl.textContent;leadLbl.textContent='Enviando…';msg.textContent='';
+  try{
+    const r=await fetch('https://api.web3forms.com/submit',{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},
+      body:JSON.stringify({access_key:W3F_KEY,subject:'Diagnóstico web · '+d.nombre.trim(),from_name:'Web Ezyron',replyto:d.email.trim(),
+        nombre:d.nombre.trim(),email:d.email.trim(),'Qué se repite':d.tarea.trim(),botcheck:''})});
+    const j=await r.json().catch(()=>({}));
+    if(!r.ok||j.success===false)throw new Error(j.message||r.status);
+    f.reset();msg.textContent='Recibido. Te respondemos muy pronto.';msg.classList.add('ok');leadLbl.textContent='Enviado';
+    setTimeout(()=>{leadLbl.textContent=lbl;},4000);
+  }catch(err){
+    leadLbl.textContent=lbl;
+    msg.innerHTML='';msg.classList.add('err');
+    msg.append('No se pudo enviar. Prueba otra vez o escríbenos a ');const a=document.createElement('a');a.href='mailto:'+MAIL_TO;a.textContent=MAIL_TO;msg.append(a,'.');
+  }finally{leadBtn.disabled=false;leadBtn.removeAttribute('aria-busy');}
 });
+leadForm.addEventListener('input',e=>{e.target.setCustomValidity&&e.target.setCustomValidity('');});
 
 /* ---------- v2 · sacudida corta en los CTA (sin congelar el resto de animaciones) ---------- */
 if(!RM)document.querySelectorAll('.btn,.pill.cta').forEach(b=>b.addEventListener('pointerdown',()=>{

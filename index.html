@@ -195,9 +195,10 @@
  ]
 }
 </script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@300;400;500;600;800;900&family=Instrument+Serif:ital@0;1&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<!-- tipografías servidas desde ezyron.com (sin Google Fonts: ninguna petición a terceros al abrir la web) -->
+<link rel="preload" href="fonts/inter-tight-normal-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="css/consent.css">
 <style>
 :root{
   --ink:#0B0B0D; --ink-2:#141417; --cream:#F0E8DC; --cream-2:#E4DACB; --red:#E3232D; --red-deep:#B3141C;
@@ -523,6 +524,9 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 @keyframes fqIn{from{opacity:0;transform:translateY(-6px)}}
 @media (max-width:900px){.faq{grid-template-columns:1fr}.fq p{padding-left:0;padding-right:0}}
 
+.f-legal{display:flex;gap:22px;flex-wrap:wrap}
+.f-legal a{transition:color .25s}
+.f-legal a:hover{color:var(--cream)}
 /* ---------- v2 · PIE: marca gigante ---------- */
 .f-mark{grid-column:1/-1;order:9;margin-top:clamp(60px,8vw,120px)}
 .f-mark svg{width:100%;height:auto}
@@ -901,8 +905,9 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     <div><h5>Explora</h5><a href="#dolor">Punto de partida</a><a href="#sistema">Sistema</a><a href="#servicios">Servicios</a><a href="#metodo">Método</a><a href="#calculo">Calculadora</a><a href="#preguntas">Preguntas</a></div>
     <div><h5>Contacto</h5><a href="mailto:info.ezyron@gmail.com">info.ezyron@gmail.com</a><a href="https://www.instagram.com/ezyron.studios/" target="_blank" rel="noopener">Instagram · @ezyron.studios</a><a href="#contacto">Pedir diagnóstico</a></div>
   </div>
-  <div class="f-bottom mono"><span>© 2026 Ezyron · Valladolid</span><span>Sistemas · Automatización · IA</span></div>
+  <div class="f-bottom mono"><span>© 2026 Ezyron · Valladolid</span><span class="f-legal"><a href="politica-de-cookies.html">Política de cookies</a><a href="#cookies" data-cookie-settings>Configurar cookies</a></span><span>Sistemas · Automatización · IA</span></div>
 </footer>
+<script src="js/consent.js" defer></script>
 
 <script>
 (() => {

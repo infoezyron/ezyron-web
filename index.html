@@ -13,8 +13,8 @@
 <meta property="og:site_name" content="Ezyron">
 <meta property="og:title" content="Ezyron — Todo empieza en un punto">
 <meta property="og:description" content="Sistemas, automatización e IA aplicada para empresas que quieren funcionar solas.">
-<meta property="og:url" content="https://infoezyron.github.io/ezyron-web/">
-<meta property="og:image" content="https://infoezyron.github.io/ezyron-web/og.jpg">
+<meta property="og:url" content="https://ezyron.com/">
+<meta property="og:image" content="https://ezyron.com/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:locale" content="es_ES">
@@ -39,7 +39,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 :focus-visible{outline:2px solid var(--red);outline-offset:4px;border-radius:4px}
 
 /* grain */
-body::after{content:"";position:fixed;inset:-50%;pointer-events:none;z-index:90;opacity:.07;
+body::after{content:"";position:fixed;inset:-10%;pointer-events:none;z-index:90;opacity:.07;
   background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/></filter><rect width='200' height='200' filter='url(%23n)'/></svg>");
   animation:grain 1.2s steps(6) infinite}
 @keyframes grain{0%{transform:translate(0,0)}20%{transform:translate(-3%,2%)}40%{transform:translate(2%,-3%)}60%{transform:translate(-2%,-1%)}80%{transform:translate(3%,3%)}100%{transform:translate(0,0)}}
@@ -114,7 +114,7 @@ canvas.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* SISTEMA */
 #sistema{height:680vh}
 #sistema .pin{background:var(--ink)}
-#sistema .pin::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;background:linear-gradient(90deg,rgba(11,11,13,.92) 0%,rgba(11,11,13,.7) 30%,rgba(11,11,13,0) 48%)}
+#sistema .pin::after{content:"";position:absolute;inset:0;z-index:1;pointer-events:none;opacity:var(--veil,1);background:linear-gradient(90deg,rgba(11,11,13,.92) 0%,rgba(11,11,13,.7) 30%,rgba(11,11,13,0) 48%)}
 .s-card,.s-index,.s-counter{z-index:2}
 @media (max-width:900px){#sistema .pin::after{background:linear-gradient(0deg,rgba(11,11,13,.95) 0%,rgba(11,11,13,.8) 34%,rgba(11,11,13,0) 52%)}}
 .s-card{position:absolute;left:var(--pad);top:50%;transform:translateY(-50%);width:min(440px,38vw);pointer-events:none}
@@ -133,7 +133,9 @@ canvas.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
 .s-counter b{display:block;font:800 clamp(40px,5vw,80px)/1 var(--sans);letter-spacing:-.05em;color:var(--cream);font-variant-numeric:tabular-nums}
 
 /* SERVICIOS */
-#servicios{height:560vh}
+/* Servicios arranca 100vh antes, debajo de Sistema: al salir el rojo de Sistema ya está Servicios con su contenido, sin pantalla roja vacía */
+#sistema{z-index:2}
+#servicios{height:660vh;margin-top:-100vh;margin-top:-100svh;scroll-margin-top:-100vh;z-index:1}
 #servicios .pin{background:var(--red);color:var(--ink)}
 .sv-word{position:absolute;left:0;right:0;top:50%;transform:translateY(-50%);text-align:center;font:900 clamp(80px,17vw,300px)/.8 var(--sans);letter-spacing:-.07em;white-space:nowrap;pointer-events:none;opacity:0}
 .sv-glyph{position:absolute;left:50%;top:50%;width:clamp(240px,34vmin,420px);aspect-ratio:1;margin:calc(clamp(240px,34vmin,420px)/-2) 0 0 calc(clamp(240px,34vmin,420px)/-2);pointer-events:none}
@@ -188,7 +190,7 @@ canvas.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
 .m-title{position:absolute;left:var(--pad);top:calc(var(--pad) + 76px);font:800 clamp(44px,6vw,100px)/.88 var(--sans);letter-spacing:-.055em}
 .m-title .serif{font-weight:400}
 .m-line{position:absolute;left:var(--pad);right:var(--pad);top:58%;height:1px;background:rgba(11,11,13,.18)}
-.m-line .fill{position:absolute;left:0;top:0;height:1px;width:0;background:var(--ink)}
+.m-line .fill{position:absolute;left:0;top:0;height:1px;width:100%;transform:scaleX(0);transform-origin:0 0;background:var(--ink)}
 .m-line .runner{position:absolute;top:0;left:0;width:22px;height:22px;margin:-11px 0 0 -11px;border-radius:50%;background:var(--red);box-shadow:0 0 0 0 rgba(227,35,45,.35);animation:pulse 1.8s infinite}
 @keyframes pulse{70%{box-shadow:0 0 0 22px rgba(227,35,45,0)}100%{box-shadow:0 0 0 0 rgba(227,35,45,0)}}
 .m-step{position:absolute;top:58%;width:min(250px,22vw);transform:translateX(-4px);transition:opacity .5s}
@@ -212,7 +214,8 @@ canvas.scene{position:absolute;inset:0;width:100%;height:100%;display:block}
 /* CIERRE */
 #cierre{height:340vh}
 #cierre .pin{background:var(--ink);color:var(--ink)}
-.c-dot{position:absolute;left:50%;top:50%;width:40px;height:40px;margin:-20px 0 0 -20px;border-radius:50%;background:var(--red);will-change:transform}
+/* el punto se recorta con clip-path (vectorial): sigue nítido al crecer a pantalla completa, sin bordes pixelados */
+.c-dot{position:absolute;inset:0;background:var(--red);clip-path:circle(20px at 50% 50%)}
 .c-copy{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:0 var(--pad);gap:34px}
 .c-copy h2{font:800 clamp(56px,11vw,190px)/.84 var(--sans);letter-spacing:-.065em}
 .c-copy h2 .serif{font-weight:400}
@@ -358,13 +361,24 @@ form.lead-form{display:grid;gap:26px;align-content:start}
   .f-logo{grid-column:1/-1}
   .rail{display:none}
   /* v2 · móvil: sticky más cortos (el pulgar va más rápido que la rueda) */
-  #origen{height:440vh} #sistema{height:520vh} #servicios{height:460vh} #metodo{height:340vh} #cierre{height:260vh}
+  #origen{height:440vh} #sistema{height:520vh} #servicios{height:560vh} #metodo{height:340vh} #cierre{height:260vh}
   .pain-grid{grid-template-columns:1fr}
   .pain-card{min-height:0;gap:36px}
   .calc,.contact{grid-template-columns:1fr}
   .calc{background:radial-gradient(90% 40% at 50% 85%,rgba(227,35,45,.18),transparent 70%),var(--ink)}
   .f-top{grid-template-columns:1fr 1fr}
   .f-top>div:first-child{grid-column:1/-1}
+  /* v3 · móvil vertical: contacto a lo ancho y pie apilado */
+  .f-top>div:last-child{grid-column:1/-1}
+  .f-top a{padding:6px 0;margin-bottom:2px}
+  .f-bottom{flex-direction:column;gap:6px}
+}
+/* v3 · móviles bajos (iPhone SE, etc.): la palabra y el dibujo suben para no pisar el texto */
+@media (max-width:900px) and (max-height:700px){
+  .sv-word{top:39%}
+  .sv-glyph{top:35%}
+  .sv-stat{top:calc(var(--pad) + 54px)}
+  .sv-stat b{font-size:34px}
 }
 @media (prefers-reduced-motion:reduce){
   body::after,.marquee-track,.spin,.breathe,.ripple,.m-line .runner,.ld-enter em::after{animation:none}
@@ -421,7 +435,7 @@ form.lead-form{display:grid;gap:26px;align-content:start}
   <div class="pin">
     <canvas class="scene" id="c1"></canvas>
     <div class="o-top mono" data-a="0" data-b=".1" data-fade="out">
-      <span>Ezyron — Madrid</span><span>N 40°25′ · W 3°42′</span>
+      <span>Ezyron — Valladolid</span><span>N 41°39′ · W 4°43′</span>
     </div>
     <div class="o-copy">
       <h1 class="h-hero" data-a="0" data-b=".12" data-fade="out">Todo empieza<br>en un <span class="serif">punto.</span></h1>
@@ -648,7 +662,7 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     <label class="lf"><span>¿Qué tarea se repite cada semana?</span><textarea name="tarea" rows="3" required placeholder="Cada lunes pasamos los pedidos del correo al ERP a mano…"></textarea></label>
     <div class="form-row">
       <button class="btn dark" type="submit" data-cursor="Enviar"><i></i>Pedir diagnóstico</button>
-      <span class="note">Abre tu correo con el mensaje listo · email provisional</span>
+      <span class="note">Abre tu correo con el mensaje listo</span>
     </div>
     <p class="form-msg" id="form-msg" aria-live="polite"></p>
   </form>
@@ -671,9 +685,9 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     </div>
     <div><h5>Estudio</h5><p>Sistemas, automatización e IA aplicada para empresas que quieren funcionar solas.</p></div>
     <div><h5>Explora</h5><a href="#dolor">Punto de partida</a><a href="#sistema">Sistema</a><a href="#servicios">Servicios</a><a href="#metodo">Método</a><a href="#calculo">Calculadora</a></div>
-    <div><h5>Contacto</h5><a href="mailto:hola@ezyron.com">hola@ezyron.com</a><a href="#contacto">Pedir diagnóstico</a></div>
+    <div><h5>Contacto</h5><a href="mailto:info.ezyron@gmail.com">info.ezyron@gmail.com</a><a href="https://www.instagram.com/ezyron.studios/" target="_blank" rel="noopener">Instagram · @ezyron.studios</a><a href="#contacto">Pedir diagnóstico</a></div>
   </div>
-  <div class="f-bottom mono"><span>© 2026 Ezyron</span><span>Sistemas · Automatización · IA</span></div>
+  <div class="f-bottom mono"><span>© 2026 Ezyron · Valladolid</span><span>Sistemas · Automatización · IA</span></div>
 </footer>
 
 <script>
@@ -711,7 +725,8 @@ const DX=980.5, DY=533;
 /* ---------- canvas helpers ---------- */
 function setup(cv){
   const o={cv,ctx:cv.getContext('2d'),W:0,H:0,dpr:1};
-  o.fit=()=>{const r=cv.getBoundingClientRect();o.dpr=Math.min(devicePixelRatio||1,2);o.W=r.width;o.H=r.height;cv.width=Math.round(r.width*o.dpr);cv.height=Math.round(r.height*o.dpr);};
+  o.fit=()=>{const r=cv.getBoundingClientRect();// supermuestreo: en pantallas 1x se dibuja al doble (1,5x en monitores grandes) para bordes suaves, sin dientes de sierra
+    o.dpr=Math.min(2,Math.max(devicePixelRatio||1,r.width*r.height>2.4e6?1.5:2));o.W=r.width;o.H=r.height;cv.width=Math.round(r.width*o.dpr);cv.height=Math.round(r.height*o.dpr);};
   o.fit();return o;
 }
 function glow(ctx,x,y,r,a){
@@ -868,7 +883,9 @@ function drawS2(p,t){
 
   // hub
   const big=ease(seg(p,.9,1));
-  const hr=lerp(R0*(1+.05*Math.sin(t*2.1)),Math.hypot(W,H)*.6,big);
+  const hr=lerp(R0*(1+.05*Math.sin(t*2.1)),Math.hypot(W,H)*.75,big);
+  // el velo lateral se funde a la vez que crece el rojo (sin corte); el rojo llena la pantalla justo antes del relevo, con el contador visible
+  S2.cv.parentElement.style.setProperty('--veil',(1-ease(seg(p,.89,.96))).toFixed(3));
   pulses(ctx,hx,hy,R0,t,(1-morph)*fade*.8);
   ctx.save();ctx.shadowColor='rgba(227,35,45,.7)';ctx.shadowBlur=30*(1-big);dot(ctx,hx,hy,hr);ctx.restore();
 }
@@ -876,9 +893,16 @@ function drawS2(p,t){
 /* ---------- sections & scroll engine ---------- */
 const secs=[...document.querySelectorAll('.scrub')].map(el=>({el,id:el.id,p:0,sp:0,fades:[...el.querySelectorAll('[data-a]')]}));
 const byId=Object.fromEntries(secs.map(s=>[s.id,s]));
+const navEls=[...document.querySelectorAll('[data-nav]')];
+const LAYOUT={nav:[],mLine:0,rail:0,max:1,mf:null};
 function readProgress(){
   const vh=innerHeight;
-  secs.forEach(s=>{const r=s.el.getBoundingClientRect();s.p=clamp(-r.top/(r.height-vh));s.vis=r.bottom>0&&r.top<vh;});
+  LAYOUT.nav=navEls.map(el=>[el,el.getBoundingClientRect()]);
+  LAYOUT.mLine=document.querySelector('.m-line').offsetWidth;
+  LAYOUT.rail=document.querySelector('.rail').offsetHeight;
+  LAYOUT.max=Math.max(1,document.documentElement.scrollHeight-vh);
+  LAYOUT.mf=document.getElementById('mf').getBoundingClientRect();
+  secs.forEach(s=>{const r=s.r=s.el.getBoundingClientRect(),off=s.id==='servicios'?svPin.offsetHeight:0;s.p=clamp((-r.top-off)/(r.height-vh-off));s.vis=r.bottom>0&&r.top<vh;s.leave=clamp((-r.top-(r.height-vh))/vh);});
 }
 function applyFades(s){
   s.fades.forEach(el=>{
@@ -930,6 +954,17 @@ function drawServices(p){
   }
 }
 
+/* v3 · móvil vertical: la palabra gigante de cada servicio cabe entera en pantalla */
+function fitSvWords(){
+  svWords.forEach(w=>{w.style.fontSize='';
+    if(innerWidth>900)return;
+    const max=innerWidth*.94, cur=w.scrollWidth;
+    if(cur>max){const fs=parseFloat(getComputedStyle(w).fontSize);w.style.fontSize=(fs*max/cur).toFixed(1)+'px';}
+  });
+}
+fitSvWords();addEventListener('resize',fitSvWords);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSvWords);
+
 /* manifesto word reveal */
 const mf=document.getElementById('mf');
 (function splitWords(el){
@@ -948,9 +983,9 @@ const mFill=document.querySelector('.m-line .fill'),mRun=document.querySelector(
 const mStops=[0,.27,.53,.79];
 function drawMethod(p){
   const q=ease(seg(p,.05,.95));
-  const line=document.querySelector('.m-line').offsetWidth;
+  const line=LAYOUT.mLine;
   const pos=isMobile()?q:q*.79+.0;
-  mFill.style.width=(pos*line)+'px';mRun.style.transform=`translateX(${pos*line}px)`;
+  mFill.style.transform=`scaleX(${pos.toFixed(4)})`;mRun.style.transform=`translateX(${pos*line}px)`;
   let cur=0;mStops.forEach((s,i)=>{if((isMobile()?q*.999:pos)>=(isMobile()?i/4:s)-.001)cur=i;});
   mSteps.forEach((el,i)=>{el.classList.toggle('on',i<=cur);el.classList.toggle('cur',i===cur);});
   mBig.textContent=String(cur+1).padStart(2,'0');
@@ -962,7 +997,7 @@ function drawClose(p){
   const W=innerWidth,H=innerHeight,diag=Math.hypot(W,H);
   const g=ease(seg(p,.12,.55));
   const sc=lerp(1,diag/40*1.05,g)*(1+.05*Math.sin(perf()*2.1)*(1-g));
-  cDot.style.transform=`scale(${sc.toFixed(3)})`;
+  cDot.style.clipPath=`circle(${(20*sc).toFixed(2)}px at 50% 50%)`;
 }
 const perf=()=>performance.now()/1000;
 
@@ -971,8 +1006,7 @@ const nav=document.getElementById('nav'),rail=document.querySelector('.rail'),ra
 const navLinks=[...document.querySelectorAll('.nav-links a')];
 function navTheme(){
   const y=40;let theme='dark',red=false,solid=false;
-  const els=[...document.querySelectorAll('[data-nav]')];
-  for(const el of els){const r=el.getBoundingClientRect();if(r.top<=y&&r.bottom>y){
+  for(const [el,r] of LAYOUT.nav){if(r.top<=y&&r.bottom>y){
     const n=el.dataset.nav;
     if(n==='red'){theme='light';red=true;}
     else if(n==='dynamic'){
@@ -984,9 +1018,8 @@ function navTheme(){
   nav.classList.toggle('solid',solid);
   nav.classList.toggle('light',theme==='light');nav.classList.toggle('on-red',red);
   rail.classList.toggle('light',theme==='light');rail.classList.toggle('on-red',red);
-  const max=document.documentElement.scrollHeight-innerHeight;
-  railDot.style.top=(clamp(scrollY/max)*100)+'%';
-  let act=null;secs.forEach(s=>{const r=s.el.getBoundingClientRect();if(r.top<=innerHeight*.5&&r.bottom>innerHeight*.5)act=s.id;});
+  railDot.style.transform=`translateY(${(clamp(scrollY/LAYOUT.max)*LAYOUT.rail).toFixed(1)}px)`;
+  let act=null;secs.forEach(s=>{const r=s.r;if(r.top<=innerHeight*.5&&r.bottom>innerHeight*.5)act=s.id;});
   navLinks.forEach(a=>a.classList.toggle('active',a.dataset.sec===act));
 }
 
@@ -1006,9 +1039,11 @@ addEventListener('resize',()=>{S1.fit();S2.fit();});
 function frame(){
   const t=perf();
   readProgress();
-  secs.forEach(s=>{s.sp+= (s.p-s.sp)*(SNAP?1:.12); if(Math.abs(s.p-s.sp)<1e-4)s.sp=s.p;});
+  secs.forEach(s=>{s.sp+= (s.p-s.sp)*(SNAP?1:.12); s.sp=clamp(s.sp,s.p-.035,s.p+.035); if(Math.abs(s.p-s.sp)<1e-4)s.sp=s.p;});
   const o=byId.origen,s2=byId.sistema,sv=byId.servicios,me=byId.metodo,cl=byId.cierre;
   if(o.vis){drawS1(o.sp,t);applyFades(o);}
+  // al soltarse, Sistema (ya todo rojo) se desvanece y deja ver Servicios, que espera fijado debajo
+  s2.el.firstElementChild.style.opacity=(1-sst(seg(s2.leave,0,.4))).toFixed(3);
   if(s2.vis){drawS2(s2.sp,t);applyFades(s2);
     const ci=s2.sp<.32?0:s2.sp<.6?1:2;sIdx.forEach((e,i)=>e.classList.toggle('on',i===ci));
     const n=Math.round(1+ Math.pow(seg(s2.sp,.05,.88),2.2)*9998);sNum.textContent=String(n).padStart(4,'0');}
@@ -1016,7 +1051,7 @@ function frame(){
   if(me.vis)drawMethod(me.sp);
   if(cl.vis){drawClose(cl.sp);applyFades(cl);}
   // manifesto
-  const r=mf.getBoundingClientRect();const mp=clamp((innerHeight*.85-r.top)/(r.height+innerHeight*.35));
+  const r=LAYOUT.mf;const mp=clamp((innerHeight*.85-r.top)/(r.height+innerHeight*.35));
   const on=Math.floor(mp*mfWords.length);mfWords.forEach((w,i)=>w.classList.toggle('on',i<on));
   navTheme();
   // lean del cursor (máx. ±0.5) y marquee que se inclina con la velocidad del scroll
@@ -1084,19 +1119,27 @@ document.querySelectorAll('.redact[data-seal]').forEach(r=>{r.setAttribute('role
 const $=id=>document.getElementById(id);
 const fmt=n=>n.toLocaleString('es-ES',{maximumFractionDigits:1});
 const ranges=['r-team','r-hours','r-share'].map($);
-let shownWeek=12;
+// los tres resultados se mueven juntos y con suavidad hacia el valor nuevo; el bucle se para cuando llega
+const resWeek=$('res-week'),resYear=$('res-year'),resMonths=$('res-months');
+let shownWeek=12,targetWeek=12,rolling=false,lastTxt='';
 function calc(){
   ranges.forEach(r=>r.style.setProperty('--p',((r.value-r.min)/(r.max-r.min)*100)+'%'));
   const team=+ranges[0].value,h=+ranges[1].value,sh=+ranges[2].value/100;
   $('o-team').textContent=team;$('o-hours').textContent=h+' h';$('o-share').textContent=Math.round(sh*100)+' %';
-  const week=Math.round(team*h*sh*2)/2, year=Math.round(week*46);
-  $('res-year').textContent=fmt(year)+' h';$('res-months').textContent=fmt(Math.round(year/160*2)/2);
-  return week;
+  return team*h*sh;
 }
-let targetWeek=calc();
-ranges.forEach(r=>r.addEventListener('input',()=>{targetWeek=calc();}));
-(function rollWeek(){shownWeek+=(targetWeek-shownWeek)*.18;if(Math.abs(targetWeek-shownWeek)<.05)shownWeek=targetWeek;
-  $('res-week').textContent=fmt(Math.round(shownWeek*2)/2);requestAnimationFrame(rollWeek);})();
+function paint(w){
+  const week=Math.round(w*2)/2, year=Math.round(w*46), months=Math.round(w*46/160*2)/2;
+  const txt=week+'|'+year+'|'+months;if(txt===lastTxt)return;lastTxt=txt;
+  resWeek.textContent=fmt(week);resYear.textContent=fmt(year)+' h';resMonths.textContent=fmt(months);
+}
+function roll(){
+  shownWeek+=(targetWeek-shownWeek)*.2;
+  if(Math.abs(targetWeek-shownWeek)<.02){shownWeek=targetWeek;rolling=false;}
+  paint(shownWeek);if(rolling)requestAnimationFrame(roll);
+}
+targetWeek=shownWeek=calc();paint(shownWeek);
+ranges.forEach(r=>r.addEventListener('input',()=>{targetWeek=calc();if(!rolling){rolling=true;requestAnimationFrame(roll);}}));
 
 /* ---------- v2 · formulario: sin backend, abre el correo con el mensaje listo ---------- */
 $('lead-form').addEventListener('submit',e=>{
@@ -1104,14 +1147,13 @@ $('lead-form').addEventListener('submit',e=>{
   if(!f.checkValidity()){const bad=[...f.elements].find(x=>x.willValidate&&!x.checkValidity());bad&&bad.focus();msg.textContent='Falta '+(bad?bad.closest('.lf').querySelector('span').textContent.toLowerCase():'un campo')+'.';return;}
   const d=Object.fromEntries(new FormData(f));
   const body=`Hola Ezyron,\n\nSoy ${d.nombre} (${d.email}).\n\nLo que se repite cada semana:\n${d.tarea}\n`;
-  location.href='mailto:hola@ezyron.com?subject='+encodeURIComponent('Diagnóstico · '+d.nombre)+'&body='+encodeURIComponent(body);
+  location.href='mailto:info.ezyron@gmail.com?subject='+encodeURIComponent('Diagnóstico · '+d.nombre)+'&body='+encodeURIComponent(body);
   msg.textContent='Listo: revisa tu programa de correo.';
 });
 
-/* ---------- v2 · hit-stop: 80 ms de congelado + sacudida en los CTA ---------- */
+/* ---------- v2 · sacudida corta en los CTA (sin congelar el resto de animaciones) ---------- */
 if(!RM)document.querySelectorAll('.btn,.pill.cta').forEach(b=>b.addEventListener('pointerdown',()=>{
-  const an=document.getAnimations();an.forEach(a=>a.pause());setTimeout(()=>an.forEach(a=>{try{a.play()}catch(_){}}),80);
-  b.animate([{transform:'translateX(0)'},{transform:'translateX(4px)'},{transform:'translateX(-3px)'},{transform:'translateX(2px)'},{transform:'translateX(0)'}],{duration:150,delay:80});
+  b.animate([{transform:'translateX(0)'},{transform:'translateX(4px)'},{transform:'translateX(-3px)'},{transform:'translateX(2px)'},{transform:'translateX(0)'}],{duration:150});
 }));
 })();
 </script>

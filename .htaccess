@@ -1,0 +1,73 @@
+# =====================================================================
+#  Ezyron · ezyron.com · configuración del servidor (Hostinger)
+#  Seguridad, caché y compresión. Si cambias algo, pruébalo en
+#  https://securityheaders.com y https://observatory.mozilla.org
+# =====================================================================
+
+# --- Nada de listados de carpetas ni firmas del servidor --------------
+Options -Indexes -MultiViews
+ServerSignature Off
+DirectoryIndex index.html
+ErrorDocument 403 /404.html
+ErrorDocument 404 /404.html
+
+# --- Ficheros que no son de la web: no se sirven ----------------------
+# Ficheros ocultos (.git, .htaccess, .env…) salvo /.well-known/
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule (^|/)\.(?!well-known(/|$)) - [F,L]
+</IfModule>
+# Documentación, código fuente, copias y configuraciones
+<FilesMatch "(?i)(^README|^LICENSE|\.(md|markdown|py|sh|sql|bak|old|orig|swp|log|ini|conf|env|ya?ml|lock|zip|tar|gz|psd|ai)$|^package(-lock)?\.json$|^composer\.(json|lock)$)">
+  Require all denied
+</FilesMatch>
+
+# --- Cabeceras de seguridad -------------------------------------------
+<IfModule mod_headers.c>
+  # Solo HTTPS durante un año (también subdominios)
+  Header always set Strict-Transport-Security "max-age=31536000; includeSubDomains"
+  # Política de contenido: solo recursos de ezyron.com. Única excepción:
+  # el envío del formulario a Web3Forms. Nada de scripts en línea.
+  Header always set Content-Security-Policy "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; font-src 'self'; connect-src 'self' https://api.web3forms.com; form-action 'self'; frame-ancestors 'none'; base-uri 'self'; object-src 'none'; manifest-src 'self'; worker-src 'none'; upgrade-insecure-requests"
+  # Nadie puede meter la web en un iframe (clickjacking)
+  Header always set X-Frame-Options "DENY"
+  # El navegador no adivina tipos de fichero
+  Header always set X-Content-Type-Options "nosniff"
+  # Al salir a otra web solo se envía el dominio, no la URL completa
+  Header always set Referrer-Policy "strict-origin-when-cross-origin"
+  # La web no usa cámara, micro, ubicación, pagos, USB…
+  Header always set Permissions-Policy "accelerometer=(), autoplay=(), camera=(), display-capture=(), encrypted-media=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), picture-in-picture=(), publickey-credentials-get=(), screen-wake-lock=(), serial=(), usb=(), xr-spatial-tracking=(), browsing-topics=()"
+  # Aísla la ventana de otras webs que la abran
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  # Filtro XSS antiguo: desactivado (lo recomendado hoy; la CSP lo sustituye)
+  Header always set X-XSS-Protection "0"
+  # No revelar tecnología del servidor
+  Header always unset X-Powered-By
+  Header unset X-Powered-By
+
+  # Caché: HTML siempre fresco; fuentes un año; imágenes un mes; CSS/JS un día
+  <FilesMatch "\.(html)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+  <FilesMatch "\.(png|jpe?g|svg|webp|avif|ico)$">
+    Header set Cache-Control "public, max-age=2592000"
+  </FilesMatch>
+  <FilesMatch "\.(css|js)$">
+    Header set Cache-Control "public, max-age=86400"
+  </FilesMatch>
+</IfModule>
+
+# --- Tipos y compresión -----------------------------------------------
+<IfModule mod_mime.c>
+  AddType font/woff2 .woff2
+  AddType image/svg+xml .svg
+  AddType text/plain .txt
+  AddDefaultCharset utf-8
+  AddCharset utf-8 .html .css .js .txt .xml .svg
+</IfModule>
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/plain text/xml application/javascript text/javascript application/json application/ld+json application/xml image/svg+xml
+</IfModule>

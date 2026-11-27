@@ -1,0 +1,5 @@
+# Si encuentras un fallo de seguridad en ezyron.com, escríbenos. Gracias.
+Contact: mailto:info.ezyron@gmail.com
+Expires: 2027-11-27T00:00:00.000Z
+Preferred-Languages: es, en
+Canonical: https://ezyron.com/.well-known/security.txt

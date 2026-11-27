@@ -1,14 +1,15 @@
 /* Ezyron · escena «Webs» (después de Origen).
  * El punto con el que acaba Origen es el de la tapa de un portátil cerrado visto desde arriba.
  * Al deslizar: la cámara baja, la tapa se abre, la web de muestra baja por la pantalla,
- * un cursor pulsa «Pide cita» y la tapa se vuelve a cerrar antes de seguir con la web. */
+ * un cursor pulsa «Reserva una cita» y la tapa se vuelve a cerrar antes de seguir con la web. */
 (() => {
   const sec = document.getElementById('webs'); if (!sec) return;
   const $ = id => document.getElementById(id);
   const pin = $('lp-pin'), lp = $('lp'), lid = $('lp-lid'), view = $('lp-view'), ms = $('ms');
   const shade = $('lp-shade'), cur = $('ms-cursor'), dotEl = $('lp-dot'), glowEl = $('lp-glow'), spill = $('lp-spill');
   const txt = [...pin.querySelectorAll('.lp-txt')];
-  const ctaBtn = ms.querySelector('.ms-cta .ms-btn');
+  const ctaBtn = ms.querySelector('.ms-go'), track = $('ms-track');
+  let mqOff = 0; // carrusel infinito de la web de muestra (Custom Spaces, de MotionSites)
   const SNAP = /[?&]snap/.test(location.search);
 
   /* teclado: filas con teclas de distinto ancho, como uno real */
@@ -75,12 +76,17 @@
       // 4 · la web de muestra baja dentro de la pantalla
       const q = ease(seg(sp, .44, .7));
 
-      const cam = lerp(90, G.mob ? 20 : 17, tilt);
+      // 6 · se guarda: ya cerrado, se pone plano, se centra y baja hasta meterse detrás de la sección clara
+      const flat = ease(seg(sp, .88, 1));
+      const leave = clamp((-r.top - (r.height - vh)) / vh);
+      const scF = G.mob ? .74 : .6;
+      const cam = lerp(lerp(90, G.mob ? 20 : 17, tilt), 86, flat);
       const scTD = G.mob ? .78 : .62;
-      const sc = lerp(scTD, 1, tilt);
+      const sc = lerp(lerp(scTD, 1, tilt), scF, flat);
       const tyTD = (G.H / 2 - G.R0 * .25) - (G.hinge + G.ld / 2 * scTD);
-      const ty = lerp(tyTD, 0, tilt);
-      const tx = G.mob ? 0 : G.W * .14 * tilt;
+      const tyF = G.H * .5 - (G.hinge + G.ld / 2 * scF);
+      const ty = lerp(lerp(tyTD, 0, tilt), tyF, flat) + leave * vh * 1.18;
+      const tx = G.mob ? 0 : G.W * .14 * tilt * (1 - flat);
       lp.style.transform = `translateX(${tx.toFixed(1)}px) translateY(${ty.toFixed(1)}px) scale(${sc.toFixed(3)}) rotateX(${(-cam).toFixed(2)}deg)`;
       lp.style.opacity = appear.toFixed(3);
       lid.style.transform = `translateY(-1px) rotateX(${ang.toFixed(2)}deg)`;
@@ -91,6 +97,11 @@
       glowEl.style.opacity = lit.toFixed(3);
 
       ms.style.transform = `scale(${G.s}) translateY(${(-q * G.range).toFixed(1)}px)`;
+      if (lit > .01) { // el carrusel solo corre con la tapa abierta
+        const half = track.scrollWidth / 2;
+        mqOff -= .8; if (mqOff <= -half) mqOff += half;
+        track.style.transform = `translate3d(${mqOff.toFixed(1)}px,0,0)`;
+      }
       const cv = seg(sp, .6, .66) * (1 - seg(sp, .74, .77));
       if (cv > 0) {
         const bx = ctaBtn.offsetLeft + ctaBtn.offsetWidth * .5, by = ctaBtn.offsetTop + ctaBtn.offsetHeight * .6 - q * G.range;
@@ -100,6 +111,7 @@
         cur.style.opacity = cv.toFixed(3);
         cur.style.transform = `translate(${x.toFixed(1)}px,${y.toFixed(1)}px) scale(${((G.mob ? .8 : 1) * (1 - press * .25)).toFixed(3)})`;
         ctaBtn.style.transform = `scale(${(1 - press * .06).toFixed(3)})`;
+        ctaBtn.classList.toggle('on', k > .9);
       } else cur.style.opacity = 0;
 
       // el punto suelto se encoge hasta el de la tapa y desaparece

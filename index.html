@@ -368,6 +368,17 @@ form.lead-form{display:grid;gap:26px;align-content:start}
   .calc{background:radial-gradient(90% 40% at 50% 85%,rgba(227,35,45,.18),transparent 70%),var(--ink)}
   .f-top{grid-template-columns:1fr 1fr}
   .f-top>div:first-child{grid-column:1/-1}
+  /* v3 · móvil vertical: contacto a lo ancho y pie apilado */
+  .f-top>div:last-child{grid-column:1/-1}
+  .f-top a{padding:6px 0;margin-bottom:2px}
+  .f-bottom{flex-direction:column;gap:6px}
+}
+/* v3 · móviles bajos (iPhone SE, etc.): la palabra y el dibujo suben para no pisar el texto */
+@media (max-width:900px) and (max-height:700px){
+  .sv-word{top:39%}
+  .sv-glyph{top:35%}
+  .sv-stat{top:calc(var(--pad) + 54px)}
+  .sv-stat b{font-size:34px}
 }
 @media (prefers-reduced-motion:reduce){
   body::after,.marquee-track,.spin,.breathe,.ripple,.m-line .runner,.ld-enter em::after{animation:none}
@@ -651,7 +662,7 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     <label class="lf"><span>¿Qué tarea se repite cada semana?</span><textarea name="tarea" rows="3" required placeholder="Cada lunes pasamos los pedidos del correo al ERP a mano…"></textarea></label>
     <div class="form-row">
       <button class="btn dark" type="submit" data-cursor="Enviar"><i></i>Pedir diagnóstico</button>
-      <span class="note">Abre tu correo con el mensaje listo · email provisional</span>
+      <span class="note">Abre tu correo con el mensaje listo</span>
     </div>
     <p class="form-msg" id="form-msg" aria-live="polite"></p>
   </form>
@@ -674,9 +685,9 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     </div>
     <div><h5>Estudio</h5><p>Sistemas, automatización e IA aplicada para empresas que quieren funcionar solas.</p></div>
     <div><h5>Explora</h5><a href="#dolor">Punto de partida</a><a href="#sistema">Sistema</a><a href="#servicios">Servicios</a><a href="#metodo">Método</a><a href="#calculo">Calculadora</a></div>
-    <div><h5>Contacto</h5><a href="mailto:hola@ezyron.com">hola@ezyron.com</a><a href="#contacto">Pedir diagnóstico</a></div>
+    <div><h5>Contacto</h5><a href="mailto:info.ezyron@gmail.com">info.ezyron@gmail.com</a><a href="https://www.instagram.com/ezyron.studios/" target="_blank" rel="noopener">Instagram · @ezyron.studios</a><a href="#contacto">Pedir diagnóstico</a></div>
   </div>
-  <div class="f-bottom mono"><span>© 2026 Ezyron</span><span>Sistemas · Automatización · IA</span></div>
+  <div class="f-bottom mono"><span>© 2026 Ezyron · Valladolid</span><span>Sistemas · Automatización · IA</span></div>
 </footer>
 
 <script>
@@ -943,6 +954,17 @@ function drawServices(p){
   }
 }
 
+/* v3 · móvil vertical: la palabra gigante de cada servicio cabe entera en pantalla */
+function fitSvWords(){
+  svWords.forEach(w=>{w.style.fontSize='';
+    if(innerWidth>900)return;
+    const max=innerWidth*.94, cur=w.scrollWidth;
+    if(cur>max){const fs=parseFloat(getComputedStyle(w).fontSize);w.style.fontSize=(fs*max/cur).toFixed(1)+'px';}
+  });
+}
+fitSvWords();addEventListener('resize',fitSvWords);
+if(document.fonts&&document.fonts.ready)document.fonts.ready.then(fitSvWords);
+
 /* manifesto word reveal */
 const mf=document.getElementById('mf');
 (function splitWords(el){
@@ -1125,7 +1147,7 @@ $('lead-form').addEventListener('submit',e=>{
   if(!f.checkValidity()){const bad=[...f.elements].find(x=>x.willValidate&&!x.checkValidity());bad&&bad.focus();msg.textContent='Falta '+(bad?bad.closest('.lf').querySelector('span').textContent.toLowerCase():'un campo')+'.';return;}
   const d=Object.fromEntries(new FormData(f));
   const body=`Hola Ezyron,\n\nSoy ${d.nombre} (${d.email}).\n\nLo que se repite cada semana:\n${d.tarea}\n`;
-  location.href='mailto:hola@ezyron.com?subject='+encodeURIComponent('Diagnóstico · '+d.nombre)+'&body='+encodeURIComponent(body);
+  location.href='mailto:info.ezyron@gmail.com?subject='+encodeURIComponent('Diagnóstico · '+d.nombre)+'&body='+encodeURIComponent(body);
   msg.textContent='Listo: revisa tu programa de correo.';
 });
 

@@ -574,8 +574,8 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 .lp-shade{position:absolute;inset:0;background:var(--ink);opacity:1;pointer-events:none;z-index:4}
 .lp-back{transform:translateZ(calc(var(--ltt)*-1)) rotateY(180deg);background:linear-gradient(160deg,#1b1b1f,#111114)!important}
 .lp-back i{position:absolute;left:50%;top:50%;width:calc(var(--lw)*.06);aspect-ratio:1;border-radius:50%;background:var(--red);transform:translate(-50%,-50%);box-shadow:0 0 40px rgba(227,35,45,.7)}
-.lp-eT{left:0;top:0;width:100%;height:var(--ltt);transform-origin:50% 0;transform:rotateX(-90deg);border-radius:4px}
-.lp-eL,.lp-eR{top:0;width:var(--ltt);height:100%;transform-origin:0 50%;transform:rotateY(90deg)}
+.lp-eT{left:calc(var(--lw)*.026);top:0;width:calc(100% - var(--lw)*.052);height:var(--ltt);transform-origin:50% 0;transform:rotateX(-90deg);border-radius:4px}
+.lp-eL,.lp-eR{top:calc(var(--lw)*.026);width:var(--ltt);height:calc(100% - var(--lw)*.026 - 5px);transform-origin:0 50%;transform:rotateY(90deg)}
 .lp-eL{left:0}.lp-eR{left:100%}
 .lp-copy{position:absolute;left:var(--pad);bottom:calc(var(--pad)*.9);max-width:min(520px,40vw);pointer-events:none;opacity:0}
 .lp-copy h2{font:800 clamp(34px,4.2vw,68px)/.9 var(--sans);letter-spacing:-.055em}

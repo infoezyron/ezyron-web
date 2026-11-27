@@ -39,10 +39,10 @@
     const W = innerWidth, H = pin.clientHeight || innerHeight, mob = W <= 900;
     // la web de muestra se diseña a 960 px (en móvil a 760, en su versión compacta) y se escala a la pantalla
     ms.classList.toggle('sm', mob);
-    const lw = mob ? Math.min(W * .9, 520) : Math.min(W * .5, H * .9, 1040);
+    const lw = mob ? Math.min(W * .9, 520) : Math.min(W * .4, H * .72, 860);
     const lh = lw * .655, ld = lh, lt = lw * .028, ltt = lw * .012;
     for (const [k, v] of Object.entries({ '--lw': lw, '--lh': lh, '--ld': ld, '--lt': lt, '--ltt': ltt })) lp.style.setProperty(k, v + 'px');
-    const hinge = mob ? H * .4 + lh * .42 : H * .5 + lh * .22;
+    const hinge = mob ? H * .4 + lh * .42 : H * .54 + lh * .22;
     lp.style.top = (hinge - lh) + 'px';
     const msW = mob ? 760 : 960;
     ms.style.width = msW + 'px';

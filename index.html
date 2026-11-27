@@ -527,46 +527,68 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 .f-legal{display:flex;gap:22px;flex-wrap:wrap}
 .f-legal a{transition:color .25s}
 .f-legal a:hover{color:var(--cream)}
-/* ---------- v4 · WEBS · portátil en línea: la web de muestra baja, la tapa se cierra y queda el punto ---------- */
-#webs{height:340vh;z-index:3}
-#webs .pin{background:radial-gradient(120% 90% at 50% 45%,#121215 0%,var(--ink) 62%)}
-/* Origen arranca debajo del portátil: al cerrarse la tapa ya está su punto esperando */
-#origen{height:660vh;margin-top:-100vh;margin-top:-100svh;z-index:1}
-.lp-glow{position:absolute;left:50%;top:44%;width:min(1200px,130vw);aspect-ratio:1.6;transform:translate(-50%,-50%);pointer-events:none;
-  background:radial-gradient(50% 50% at 50% 50%,rgba(200,105,61,.20),rgba(110,139,116,.10) 45%,transparent 70%);filter:blur(10px)}
+/* ---------- v4 · WEBS · el punto se convierte en un portátil 3D dibujado en línea; se abre, enseña una web y se cierra ---------- */
+/* arranca 100vh antes, encima del final de Origen: el punto de Origen pasa a ser el de la tapa */
+#webs{height:440vh;margin-top:-100vh;margin-top:-100svh;z-index:3}
+#webs .pin{background:radial-gradient(120% 90% at 50% 50%,#121215 0%,var(--ink) 60%)}
+.lp-glow{position:absolute;left:50%;top:46%;width:min(1300px,140vw);aspect-ratio:1.5;transform:translate(-50%,-50%);pointer-events:none;opacity:0;
+  background:radial-gradient(50% 50% at 50% 50%,rgba(200,105,61,.22),rgba(110,139,116,.10) 45%,transparent 70%)}
 .lp-top{position:absolute;top:calc(var(--pad) + 60px);left:var(--pad);right:var(--pad);display:flex;justify-content:space-between;color:var(--mute);pointer-events:none}
 .lp-top b{color:var(--red);font-weight:500}
-.lp-stage{position:absolute;inset:0;perspective:2400px;perspective-origin:50% 35%;pointer-events:none}
-.lp{position:absolute;left:50%;top:0;width:var(--lw);height:var(--lh);margin-left:calc(var(--lw)/-2);transform-style:preserve-3d;transform-origin:50% 100%}
-.lp *{transform-style:preserve-3d}
-.lp-line{border:1.5px solid rgba(240,232,220,.88)}
-/* base: tumbada hacia el visitante */
-.lp-base{position:absolute;left:-3.5%;width:107%;top:100%;height:var(--ld);transform-origin:50% 0;transform:rotateX(90deg);border-radius:0 0 calc(var(--lw)*.03) calc(var(--lw)*.03);
-  background:linear-gradient(180deg,rgba(240,232,220,.05),rgba(240,232,220,.015))}
-.lp-keys{position:absolute;left:9%;right:9%;top:9%;height:44%;border-radius:6px;border:1px solid rgba(240,232,220,.28);
-  background-image:linear-gradient(90deg,rgba(240,232,220,.16) 1px,transparent 1px),linear-gradient(0deg,rgba(240,232,220,.16) 1px,transparent 1px);background-size:calc(100%/14) calc(100%/6)}
-.lp-pad{position:absolute;left:33%;right:33%;top:60%;height:30%;border-radius:8px;border:1px solid rgba(240,232,220,.4)}
-/* tapa: gira sobre la bisagra */
+.lp-stage{position:absolute;inset:0;perspective:2600px;perspective-origin:50% 38%;pointer-events:none}
+.lp{position:absolute;left:50%;top:0;width:var(--lw);height:var(--lh);margin-left:calc(var(--lw)/-2);transform-style:preserve-3d;transform-origin:50% 100%;opacity:0}
+.lp div{transform-style:preserve-3d}
+/* caras: solo el borde dibujado y un velo casi transparente */
+.lp .f{position:absolute;border:1.3px solid rgba(240,232,220,.86);background:rgba(240,232,220,.028)}
+/* base (caja con grosor) */
+.lp-base{position:absolute;left:0;top:100%;width:100%;height:0}
+.lp-deck{left:0;top:0;width:100%;height:var(--ld);transform-origin:50% 0;transform:rotateX(90deg);border-radius:4px 4px calc(var(--lw)*.026) calc(var(--lw)*.026)}
+.lp-under{left:0;top:0;width:100%;height:var(--ld);transform-origin:50% 0;transform:translateY(var(--lt)) rotateX(90deg);border-radius:4px 4px calc(var(--lw)*.026) calc(var(--lw)*.026);background:rgba(11,11,13,.6)!important;border-color:rgba(240,232,220,.35)!important}
+.lp-front{left:0;top:0;width:100%;height:var(--lt);transform:translateZ(var(--ld));border-radius:0 0 calc(var(--lw)*.02) calc(var(--lw)*.02)}
+.lp-front::after{content:"";position:absolute;left:44%;right:44%;top:-1px;height:55%;border:1.3px solid rgba(240,232,220,.86);border-top:0;border-radius:0 0 10px 10px}
+.lp-sideL,.lp-sideR{top:0;width:var(--ld);height:var(--lt);transform-origin:0 0;transform:rotateY(-90deg)}
+.lp-sideL{left:0}.lp-sideR{left:100%}
+.lp-kb{position:absolute;left:12.5%;right:12.5%;top:7%;height:47%;display:flex;flex-direction:column;gap:2.2%}
+.lp-kb .row{display:flex;gap:.9%;flex:1}
+.lp-kb .row.fn{flex:.55}
+.lp-kb i{flex:1;border:1px solid rgba(240,232,220,.34);border-radius:3px;background:rgba(240,232,220,.02)}
+.lp-kb .row:last-child i.ar{display:flex}
+.lp-spk{position:absolute;top:7%;height:47%;width:8%;background-image:radial-gradient(rgba(240,232,220,.38) 0.9px,transparent 1.2px);background-size:7px 7px;opacity:.8}
+.lp-spk.l{left:2.4%}.lp-spk.r{right:2.4%}
+.lp-pad{position:absolute;left:31%;right:31%;top:60%;height:33%;border:1px solid rgba(240,232,220,.5);border-radius:10px}
+.lp-spill{position:absolute;left:0;right:0;top:0;height:70%;background:radial-gradient(60% 80% at 50% 0%,rgba(200,105,61,.22),rgba(110,139,116,.08) 50%,transparent 75%);opacity:0}
+.lp-hinge{position:absolute;left:12%;width:76%;top:calc(var(--lt)*-.2);height:calc(var(--lt)*1.1);border:1.3px solid rgba(240,232,220,.6);border-radius:99px;transform:translateZ(calc(var(--lt)*-.3));background:rgba(11,11,13,.5)}
+/* tapa (con grosor) */
 .lp-lid{position:absolute;inset:0;transform-origin:50% 100%}
-.lp .lp-face{transform-style:flat}
-.lp-face{position:absolute;inset:0;border-radius:calc(var(--lw)*.028) calc(var(--lw)*.028) 6px 6px;backface-visibility:hidden;-webkit-backface-visibility:hidden}
-.lp-screen{padding:calc(var(--lw)*.022) calc(var(--lw)*.022) calc(var(--lw)*.034);background:rgba(11,11,13,.35)}
-.lp-notch{position:absolute;left:50%;top:-1px;width:12%;height:calc(var(--lw)*.02);transform:translateX(-50%);border:1.5px solid rgba(240,232,220,.88);border-top:0;border-radius:0 0 8px 8px;background:var(--ink);z-index:2}
-.lp-view{position:relative;width:100%;height:100%;overflow:hidden;border-radius:4px;border:1px solid rgba(240,232,220,.35);background:#F4EFE6}
-.lp-shade{position:absolute;inset:0;background:var(--ink);opacity:0;pointer-events:none;z-index:3}
-.lp-back{transform:rotateY(180deg);background:linear-gradient(160deg,#1a1a1e,#111114)}
-.lp-back i{position:absolute;left:50%;top:50%;width:calc(var(--lw)*.07);aspect-ratio:1;border-radius:50%;background:var(--red);transform:translate(-50%,-50%);box-shadow:0 0 40px rgba(227,35,45,.7)}
-.lp-copy{position:absolute;left:var(--pad);bottom:calc(var(--pad)*.9);max-width:min(560px,44vw);pointer-events:none}
-.lp-copy h2{font:800 clamp(34px,4.4vw,72px)/.9 var(--sans);letter-spacing:-.055em}
+.lp-face{inset:0;border-radius:calc(var(--lw)*.026) calc(var(--lw)*.026) 5px 5px}
+.lp .lp-face,.lp .lp-face div{transform-style:flat}
+.lp-screen{padding:calc(var(--lw)*.02) calc(var(--lw)*.02) calc(var(--lw)*.032);background:rgba(11,11,13,.55)!important}
+.lp-notch{position:absolute;left:50%;top:-1px;width:11%;height:calc(var(--lw)*.019);transform:translateX(-50%);border:1.3px solid rgba(240,232,220,.86);border-top:0;border-radius:0 0 8px 8px;background:var(--ink);z-index:4}
+.lp-notch::after{content:"";position:absolute;left:50%;top:38%;width:5px;height:5px;margin-left:-2.5px;border-radius:50%;background:rgba(240,232,220,.35)}
+.lp-view{position:relative;width:100%;height:100%;overflow:hidden;border-radius:3px;border:1px solid rgba(240,232,220,.3);background:#F4EFE6}
+.lp-glass{position:absolute;inset:0;z-index:3;pointer-events:none;background:linear-gradient(118deg,rgba(255,255,255,.14) 0%,rgba(255,255,255,.04) 26%,transparent 42%)}
+.lp-shade{position:absolute;inset:0;background:var(--ink);opacity:1;pointer-events:none;z-index:4}
+.lp-back{transform:translateZ(calc(var(--ltt)*-1)) rotateY(180deg);background:linear-gradient(160deg,#1b1b1f,#111114)!important}
+.lp-back i{position:absolute;left:50%;top:50%;width:calc(var(--lw)*.06);aspect-ratio:1;border-radius:50%;background:var(--red);transform:translate(-50%,-50%);box-shadow:0 0 40px rgba(227,35,45,.7)}
+.lp-eT{left:0;top:0;width:100%;height:var(--ltt);transform-origin:50% 0;transform:rotateX(-90deg);border-radius:4px}
+.lp-eL,.lp-eR{top:0;width:var(--ltt);height:100%;transform-origin:0 50%;transform:rotateY(90deg)}
+.lp-eL{left:0}.lp-eR{left:100%}
+.lp-copy{position:absolute;left:var(--pad);bottom:calc(var(--pad)*.9);max-width:min(520px,40vw);pointer-events:none;opacity:0}
+.lp-copy h2{font:800 clamp(34px,4.2vw,68px)/.9 var(--sans);letter-spacing:-.055em}
 .lp-copy h2 .serif{font-weight:400}
-.lp-copy p{margin-top:16px;color:var(--mute);font-size:clamp(14px,1.05vw,16px);max-width:40ch}
-.lp-hint{position:absolute;right:calc(var(--pad) + 20px);bottom:calc(var(--pad)*.9);display:flex;flex-direction:column;align-items:flex-end;gap:6px;color:var(--mute);text-align:right;pointer-events:none}
+.lp-copy p{margin-top:16px;color:var(--mute);font-size:clamp(14px,1.05vw,16px);max-width:38ch}
+.lp-hint{position:absolute;right:calc(var(--pad) + 20px);bottom:calc(var(--pad)*.9);display:flex;flex-direction:column;align-items:flex-end;gap:10px;color:var(--mute);text-align:right;pointer-events:none;opacity:0}
 .lp-hint span{display:flex;align-items:center;gap:12px}
-.lp-hint em{width:1px;height:42px;background:linear-gradient(var(--cream),transparent);position:relative;overflow:hidden}
-.lp-hint em::after{content:"";position:absolute;left:-2px;top:-6px;width:5px;height:5px;border-radius:50%;background:var(--red);animation:drip 1.8s cubic-bezier(.6,0,.3,1) infinite}
-.lp-dot{position:absolute;left:50%;top:50%;border-radius:50%;background:var(--red);box-shadow:0 0 30px rgba(227,35,45,.7);opacity:0;pointer-events:none}
-.lp-fade{will-change:opacity,transform}
-
+.lp-dot{position:absolute;left:50%;top:50%;border-radius:50%;background:var(--red);box-shadow:0 0 30px rgba(227,35,45,.7);pointer-events:none}
+@media (max-width:900px){
+  #webs{height:400vh}
+  .lp-copy{left:var(--pad);right:var(--pad);max-width:none;bottom:calc(var(--pad) + 26px)}
+  .lp-copy h2{font-size:clamp(34px,9.4vw,50px)}
+  .lp-copy p{font-size:14px}
+  .lp-hint{display:none}
+  .lp-spk{background-size:4px 4px}
+  .lp .f{border-width:1px}
+}
 /* web de muestra (marca ficticia, otra paleta): se diseña a 960 px y se escala a la pantalla */
 .ms{position:absolute;left:0;top:0;width:960px;transform-origin:0 0;background:#F4EFE6;color:#22352B;font:400 15px/1.5 var(--sans);letter-spacing:-.01em;-webkit-font-smoothing:antialiased}
 .ms,.ms *{transform-style:flat}
@@ -615,14 +637,13 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 .ms-cta b{font:400 38px/1 var(--serif);letter-spacing:-.02em}
 .ms-cta .ms-btn{background:#F4EFE6;color:#22352B}
 .ms-foot{display:flex;justify-content:space-between;padding:22px 44px 30px;font-size:12px;opacity:.6;border-top:1px solid rgba(34,53,43,.12)}
+.ms.sm .ms-hero{grid-template-columns:1fr 1fr;gap:24px;padding:40px 36px 34px}
+.ms.sm .ms-hero h3{font-size:58px}
+.ms.sm .ms-links{display:none}
+.ms.sm .ms-stats{grid-template-columns:1fr 1fr}
+.ms.sm .ms-stats div:nth-child(3){border-left:0;padding-left:0;border-top:1px solid rgba(34,53,43,.14)}
+.ms.sm .ms-stats div:nth-child(4){border-top:1px solid rgba(34,53,43,.14)}
 .ms-cursor{position:absolute;left:0;top:0;width:22px;height:22px;z-index:4;pointer-events:none;opacity:0;filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
-@media (max-width:900px){
-  #webs{height:300vh}
-  #origen{height:540vh}
-  .lp-copy{left:var(--pad);right:var(--pad);max-width:none;bottom:calc(var(--pad) + 34px)}
-  .lp-copy h2{font-size:clamp(34px,9.6vw,52px)}
-  .lp-hint{display:none}
-}
 
 /* ---------- v2 · PIE: marca gigante ---------- */
 .f-mark{grid-column:1/-1;order:9;margin-top:clamp(60px,8vw,120px)}
@@ -659,7 +680,7 @@ form.lead-form{display:grid;gap:26px;align-content:start}
   .f-logo{grid-column:1/-1}
   .rail{display:none}
   /* v2 · móvil: sticky más cortos (el pulgar va más rápido que la rueda) */
-  #sistema{height:520vh} #servicios{height:560vh} #metodo{height:340vh} #cierre{height:260vh}
+  #origen{height:440vh} #sistema{height:520vh} #servicios{height:560vh} #metodo{height:340vh} #cierre{height:260vh}
   .pain-grid{grid-template-columns:1fr}
   .pain-card{min-height:0;gap:36px}
   .calc,.contact{grid-template-columns:1fr}
@@ -705,7 +726,7 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 
 <!-- NAV -->
 <header class="nav" id="nav">
-  <a href="#webs" class="brand" aria-label="Ezyron, inicio">
+  <a href="#origen" class="brand" aria-label="Ezyron, inicio">
     <svg viewBox="190 444 1051 180" aria-hidden="true"><g>
       <path d="M210,600 L379,600 L404,568 L274,568 L291,546 L361,546 L384,517 L275,517 Z"/>
       <path d="M759,465 L850,465 A36,42.5 0 0 1 850,550 L838,550 L903,611 L860,611 L795,550 L769,550 L769,600 L735,600 L735,522 L844,522 A11,14.5 0 0 0 844,493 L736,493 Z"/>
@@ -717,8 +738,8 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     </g><circle class="bdot" cx="980.5" cy="533" r="16"/></svg>
   </a>
   <nav class="nav-links mono" aria-label="Principal">
-    <a href="#webs" data-sec="webs">Webs</a>
     <a href="#origen" data-sec="origen">Origen</a>
+    <a href="#webs" data-sec="webs">Webs</a>
     <a href="#sistema" data-sec="sistema">Sistema</a>
     <a href="#servicios" data-sec="servicios">Servicios</a>
     <a href="#metodo" data-sec="metodo">Método</a>
@@ -728,52 +749,6 @@ form.lead-form{display:grid;gap:26px;align-content:start}
 </header>
 
 <main>
-
-<!-- 00 WEBS · lo que mejor hacemos: un portátil dibujado en línea con una web de muestra; al deslizar la tapa se cierra y queda el punto -->
-<section class="scrub" id="webs" data-nav="dark">
-  <div class="pin" id="lp-pin">
-    <div class="lp-glow lp-fade" data-lp="glow"></div>
-    <div class="lp-top mono lp-fade" data-lp="txt"><span>Ezyron — <b>Diseño web</b></span></div>
-    <div class="lp-stage">
-      <div class="lp" id="lp">
-        <div class="lp-base lp-line"><div class="lp-keys"></div><div class="lp-pad"></div></div>
-        <div class="lp-lid" id="lp-lid">
-          <div class="lp-face lp-screen lp-line">
-            <div class="lp-notch"></div>
-            <div class="lp-view" id="lp-view" aria-hidden="true">
-              <div class="ms" id="ms">
-                <div class="ms-nav"><span class="ms-logo">nórdika<i></i></span><span class="ms-links"><span>Proyectos</span><span>Estudio</span><span>Opiniones</span><span>Contacto</span></span><span class="ms-btn">Pide cita</span></div>
-                <div class="ms-hero">
-                  <div><span class="ms-kick">Interiorismo · Valladolid</span><h3>Espacios que se sienten <em>hogar.</em></h3><p>Diseñamos casas a tu medida, con atención personalizada de principio a fin.</p><div class="ms-row"><span class="ms-btn t">Ver proyectos</span><span class="ms-btn o">Hablemos</span></div></div>
-                  <div class="ms-art"><span class="win"></span><span class="lamp"></span><span class="sofa"></span><span class="rug"></span><div class="ms-badge"><span>★★★★★</span><b>4,9</b>312 reseñas en Google</div></div>
-                </div>
-                <div class="ms-stats"><div><b>+250</b><span>Clientes satisfechos</span></div><div><b>98 %</b><span>Nos recomiendan</span></div><div><b>24 h</b><span>Presupuesto sin compromiso</span></div><div><b>1 a 1</b><span>Atención personalizada</span></div></div>
-                <div class="ms-feat"><h4>Por qué nos <em>eligen</em></h4><div class="ms-cards">
-                  <div class="ms-card"><i>01</i><b>Atención personalizada</b><p>Una sola persona te acompaña en todo el proyecto.</p></div>
-                  <div class="ms-card"><i>02</i><b>Diseño a medida</b><p>Cada casa parte de cómo vives tú, no de un catálogo.</p></div>
-                  <div class="ms-card"><i>03</i><b>Entrega a tiempo</b><p>Fechas claras desde el primer día. Y se cumplen.</p></div>
-                </div></div>
-                <div class="ms-quote"><span class="st">★★★★★</span><q>“Nos entendieron desde el primer café. Ahora nuestra casa es nuestra.”</q><span>Laura y Dani · clientes satisfechos</span></div>
-                <div class="ms-cta"><b>Reserva tu visita gratuita</b><span class="ms-btn">Pide cita →</span></div>
-                <div class="ms-foot"><span>© nórdika interiorismo</span><span>Web de muestra · diseñada por Ezyron</span></div>
-              </div>
-              <svg class="ms-cursor" id="ms-cursor" viewBox="0 0 24 24"><path d="M3 2 L3 19 L8 14.5 L11.5 22 L14.5 20.6 L11 13.4 L17.5 13.4 Z" fill="#fff" stroke="#22352B" stroke-width="1.4" stroke-linejoin="round"/></svg>
-              <div class="lp-shade" id="lp-shade"></div>
-            </div>
-          </div>
-          <div class="lp-face lp-back lp-line"><i></i></div>
-        </div>
-      </div>
-    </div>
-    <div class="lp-copy lp-fade" data-lp="txt">
-      <span class="kick mono">Lo que mejor hacemos</span>
-      <h2>Creamos webs que <span class="serif">se recuerdan.</span></h2>
-      <p>Diseño y desarrollo web a medida en Valladolid: rápidas, con movimiento y listas para salir en Google.</p>
-    </div>
-    <div class="lp-hint mono lp-fade" data-lp="txt"><span>Diseño · Desarrollo · SEO</span><span>Desliza <em></em></span></div>
-    <div class="lp-dot" id="lp-dot"></div>
-  </div>
-</section>
 
 <!-- 01 ORIGEN · el punto dibuja la O y la marca -->
 <section class="scrub" id="origen" data-nav="dark">
@@ -796,6 +771,60 @@ form.lead-form{display:grid;gap:26px;align-content:start}
     <div class="o-tag" data-a=".86" data-b="1" style="top:auto;bottom:calc(var(--pad) + 10px)">
       <span class="mono" style="margin:0">El punto es el núcleo. Todo lo demás, conexiones.</span>
     </div>
+  </div>
+</section>
+
+<!-- 02 WEBS · lo que mejor hacemos: el punto de Origen se convierte en un portátil 3D dibujado en línea que se abre, enseña una web y se cierra -->
+<section class="scrub" id="webs" data-nav="dark">
+  <div class="pin" id="lp-pin">
+    <div class="lp-glow" id="lp-glow"></div>
+    <div class="lp-top mono lp-txt"><span>02 — <b>Diseño web</b></span><span class="lp-tr">Lo que mejor hacemos</span></div>
+    <div class="lp-stage">
+      <div class="lp" id="lp">
+        <div class="lp-base">
+          <div class="f lp-under"></div>
+          <div class="f lp-sideL"></div><div class="f lp-sideR"></div>
+          <div class="f lp-front"></div>
+          <div class="f lp-deck"><div class="lp-spill" id="lp-spill"></div><div class="lp-spk l"></div><div class="lp-spk r"></div><div class="lp-kb" id="lp-kb"></div><div class="lp-pad"></div></div>
+          <div class="lp-hinge"></div>
+        </div>
+        <div class="lp-lid" id="lp-lid">
+          <div class="f lp-eT"></div><div class="f lp-eL"></div><div class="f lp-eR"></div>
+          <div class="f lp-face lp-back"><i></i></div>
+          <div class="f lp-face lp-screen">
+            <div class="lp-notch"></div>
+            <div class="lp-view" id="lp-view" aria-hidden="true">
+              <div class="ms" id="ms">
+                <div class="ms-nav"><span class="ms-logo">nórdika<i></i></span><span class="ms-links"><span>Proyectos</span><span>Estudio</span><span>Opiniones</span><span>Contacto</span></span><span class="ms-btn">Pide cita</span></div>
+                <div class="ms-hero">
+                  <div><span class="ms-kick">Interiorismo · Valladolid</span><h3>Espacios que se sienten <em>hogar.</em></h3><p>Diseñamos casas a tu medida, con atención personalizada de principio a fin.</p><div class="ms-row"><span class="ms-btn t">Ver proyectos</span><span class="ms-btn o">Hablemos</span></div></div>
+                  <div class="ms-art"><span class="win"></span><span class="lamp"></span><span class="sofa"></span><span class="rug"></span><div class="ms-badge"><span>★★★★★</span><b>4,9</b>312 reseñas en Google</div></div>
+                </div>
+                <div class="ms-stats"><div><b>+250</b><span>Clientes satisfechos</span></div><div><b>98 %</b><span>Nos recomiendan</span></div><div><b>24 h</b><span>Presupuesto sin compromiso</span></div><div><b>1 a 1</b><span>Atención personalizada</span></div></div>
+                <div class="ms-feat"><h4>Por qué nos <em>eligen</em></h4><div class="ms-cards">
+                  <div class="ms-card"><i>01</i><b>Atención personalizada</b><p>Una sola persona te acompaña en todo el proyecto.</p></div>
+                  <div class="ms-card"><i>02</i><b>Diseño a medida</b><p>Cada casa parte de cómo vives tú, no de un catálogo.</p></div>
+                  <div class="ms-card"><i>03</i><b>Entrega a tiempo</b><p>Fechas claras desde el primer día. Y se cumplen.</p></div>
+                </div></div>
+                <div class="ms-quote"><span class="st">★★★★★</span><q>“Nos entendieron desde el primer café. Ahora nuestra casa es nuestra.”</q><span>Laura y Dani · clientes satisfechos</span></div>
+                <div class="ms-cta"><b>Reserva tu visita gratuita</b><span class="ms-btn">Pide cita →</span></div>
+                <div class="ms-foot"><span>© nórdika interiorismo</span><span>Web de muestra · diseñada por Ezyron</span></div>
+              </div>
+              <svg class="ms-cursor" id="ms-cursor" viewBox="0 0 24 24"><path d="M3 2 L3 19 L8 14.5 L11.5 22 L14.5 20.6 L11 13.4 L17.5 13.4 Z" fill="#fff" stroke="#22352B" stroke-width="1.4" stroke-linejoin="round"/></svg>
+              <div class="lp-glass"></div>
+              <div class="lp-shade" id="lp-shade"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="lp-copy lp-txt">
+      <span class="kick mono">Lo que mejor hacemos</span>
+      <h2>Creamos webs que <span class="serif">se recuerdan.</span></h2>
+      <p>Diseño y desarrollo web a medida en Valladolid: rápidas, con movimiento y listas para salir en Google.</p>
+    </div>
+    <div class="lp-hint mono lp-txt"><span>Diseño · Desarrollo · SEO</span><span>Clientes satisfechos · Atención personalizada</span></div>
+    <div class="lp-dot" id="lp-dot"></div>
   </div>
 </section>
 

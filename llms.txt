@@ -1,0 +1,18 @@
+# Ezyron
+
+> Estudio de tecnología en Valladolid (España). Automatizamos procesos, desarrollamos software a medida, aplicamos inteligencia artificial y diseñamos webs para empresas. Lema: «Todo empieza en un punto».
+
+## Servicios
+- Automatización de procesos: flujos automáticos, integraciones entre CRM, ERP, correo y pagos, alertas.
+- Software a medida: paneles, herramientas internas, plataformas y APIs.
+- Inteligencia artificial para empresas: agentes, asistentes y RAG sobre los datos reales de la empresa.
+- Diseño y desarrollo web: webs a medida, con movimiento, rápidas y preparadas para posicionar.
+
+## Método
+Escuchar (semana 1), diseñar (semanas 2–3), construir (semanas 4–8) y cuidar (siempre).
+
+## Contacto
+- Web: https://ezyron.com/
+- Correo: info.ezyron@gmail.com
+- Instagram: https://www.instagram.com/ezyron.studios/
+- Zona: Valladolid, Castilla y León y toda España (en persona o en remoto).
